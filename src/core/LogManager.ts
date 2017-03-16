@@ -22,9 +22,12 @@ export class LogManager {
         'file': FileAppender,
     };
 
-    public static getInstance(): LogManager {
+    public static getInstance(config?: Configuration): LogManager {
         if (!LogManager.instance) {
             LogManager.instance = injections.Container.get(LogManager, injections.Container.DefaultProvider);
+            if (config) {
+                LogManager.instance.configuration = config;
+            }
         }
         return LogManager.instance;
     }
