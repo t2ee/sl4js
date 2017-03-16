@@ -1,0 +1,23 @@
+{
+  "name": "sl4js",
+  "version": "0.1.0",
+  "description": "",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tslint": "^4.5.1",
+    "typescript": "^2.2.1"
+  },
+  "dependencies": {
+    "@types/colors": "^1.1.1",
+    "@types/moment": "^2.13.0",
+    "@types/node": "^7.0.8",
+    "colors": "^1.1.2",
+    "moment": "^2.17.1"
+  }
+}
