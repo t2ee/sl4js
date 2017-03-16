@@ -17,4 +17,4 @@ import {
 } from '@t2ee/configurable';
 
 ConfigStore.provide('LogLevel', LogLevel);
-ConfigStore.provide('relative', (p) => { console.log(p); return path.resolve(process.cwd(), p) });
+ConfigStore.provide('relative', (p) => { return path.resolve(process.cwd(), p) });

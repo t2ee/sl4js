@@ -5,12 +5,13 @@ import {
 import LogLevel from './LogLevel';
 import Layout from './Layout';
 
-interface Pattern {
+export interface Pattern {
     key: string;
     padding: number;
     index: number;
     format?: string;
     length: number;
+    patterns?: Pattern[];
 }
 
 const PLAIN_KEYS = {
@@ -76,6 +77,12 @@ function stripText(string: string, patterns: Pattern[]): Pattern[] {
         })  
         index = pattern.length + pattern.index;
     }
+    result.push({
+        key: 'text',
+        index,
+        length: string.length - index,
+        format: string.substr(index),
+    });
     return result;
 }
 
@@ -91,34 +98,60 @@ function padString(string: string, padding: number): string {
     }
 }
 
+function matchPatterns(pattern: string): Pattern[] {
+    const patterns = [];
+    for (const letter in PLAIN_KEYS) {
+        patterns.push(...matchPlain(pattern, letter, PLAIN_KEYS[letter]));
+    }
+    for (const letter in FORMAT_KEYS) {
+        patterns.push(...matchWithFormat(pattern, letter, FORMAT_KEYS[letter]));
+    }
+    const formatted = patterns.filter(pattern => !!pattern.format);
+    return patterns.filter(pattern =>
+        !formatted.find(
+            formattedPattern =>
+                formattedPattern.index === pattern.index &&
+                formattedPattern.key === pattern.key &&
+                !pattern.format
+        )
+    )
+}
+
 class PatternLayout {
 
     private patterns: Pattern[] = [];
 
     constructor(private pattern: string) {
-        for (const letter in PLAIN_KEYS) {
-            this.patterns.push(...matchPlain(pattern, letter, PLAIN_KEYS[letter]));
-        }
-        for (const letter in FORMAT_KEYS) {
-            this.patterns.push(...matchWithFormat(pattern, letter, FORMAT_KEYS[letter]));
-        }
-        const formatted = this.patterns.filter(pattern => !!pattern.format);
-        this.patterns = this.patterns.filter(pattern =>
-            !formatted.find(
-                formattedPattern =>
-                    formattedPattern.index === pattern.index &&
-                    formattedPattern.key === pattern.key &&
-                    !pattern.format
-            )
-        )
+        this.patterns  = matchPatterns(pattern); 
+        const composites = matchWithFormat(pattern, 'c', 'composite')
+            .map(composite => {
+                composite.patterns = matchPatterns(composite.format);
+                composite.patterns = composite.patterns
+                    .concat(stripText(composite.format, composite.patterns)).sort((a, b) => a.index - b.index);
+                return composite;
+            })
+        this.patterns = this.patterns.filter(pattern => {
+            for (const composite of composites) {
+                if (
+                    (pattern.index > composite.index) &&
+                    (pattern.index + pattern.length < composite.index + composite.length)
+                ) {
+                    return false;
+                }
+            }
+            return true;
+        });
+        this.patterns.push(...composites);
         this.patterns = this.patterns.concat(stripText(pattern, this.patterns)).sort((a, b) => a.index - b.index);
     }
 
-    parse(layout: Layout): string {
+    parse(layout: Layout, patterns: Pattern[] = this.patterns): string {
         let result = '';
-        for (const pattern of this.patterns) {
+        for (const pattern of patterns) {
             let part = '';
-            if (pattern.key === 'text') {
+            if (pattern.key === 'composite') {
+                part = this.parse(layout, pattern.patterns);
+            } else if (pattern.key === 'text') {
                 part = pattern.format;
             } else if (pattern.key === 'date' && pattern.format) {
                 part = moment(layout.date).format(pattern.format);
