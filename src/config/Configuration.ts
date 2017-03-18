@@ -1,5 +1,5 @@
 import {
-    Configurable, 
+    Configurable,
     ConfigField,
 } from '@t2ee/configurable';
 
@@ -10,10 +10,10 @@ import RootConfiguration from './RootConfiguration';
 @Configurable('logger')
 class Configuration {
     @ConfigField
-    appenders: AppenderConfiguration[];
+    public appenders: AppenderConfiguration[];
 
     @ConfigField
-    root: RootConfiguration;
+    public root: RootConfiguration;
 }
 
 export default Configuration;

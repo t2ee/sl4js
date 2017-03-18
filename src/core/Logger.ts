@@ -6,11 +6,13 @@ import Appender from './Appender';
 
 class Logger {
 
-    constructor(private appender: Appender<any>, private level: LogLevel) {
+    public constructor(private appender: Appender<any>, private level: LogLevel) {
     }
 
     private log(level: LogLevel, date: Date, ...messages: any[]): void {
-        if (level < this.level) return;
+        if (level < this.level) {
+            return;
+        }
         this.appender.log({
             processId: process.pid,
             workerId: cluster.isWorker ? parseInt(cluster.worker.id) : 0,
@@ -21,7 +23,7 @@ class Logger {
         });
     }
 
-    public setLevel(level: LogLevel) {
+    public setLevel(level: LogLevel): void {
         this.level = level;
     }
 

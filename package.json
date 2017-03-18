@@ -5,12 +5,15 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "lint": "tslint -c ./tslint.json --project ./tsconfig.json --type-check -t stylish",
+	"precommit": "echo 'not pre commit hooks'"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "tslint": "^4.5.1",
+    "tslint-eslint-rules": "^3.4.0",
     "typescript": "^2.2.1"
   },
   "dependencies": {

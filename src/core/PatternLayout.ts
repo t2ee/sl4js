@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 import {
-    utils,
+    EnumUtil,
 } from '@t2ee/core';
 import LogLevel from './LogLevel';
 import Layout from './Layout';
@@ -14,49 +14,52 @@ export interface Pattern {
     patterns?: Pattern[];
 }
 
-const PLAIN_KEYS = {
-    'd': 'date',
-    'm': 'message',
-    'n': 'name',
-    'p': 'processId',
-    'w': 'workerId',
-    'l': 'level',
-}
+const PLAIN_KEYS: {[key: string]: string} = {
+    d: 'date',
+    m: 'message',
+    n: 'name',
+    p: 'processId',
+    w: 'workerId',
+    l: 'level',
+};
 
-const FORMAT_KEYS = {
-    'd': 'date',
-}
+const FORMAT_KEYS: {[key: string]: string} = {
+    d: 'date',
+};
 
-function matchRecursively(string: string, regex: RegExp): RegExpMatchArray[] {
-    const result = [];
+function matchRecursively(line: string, regex: RegExp): RegExpMatchArray[] {
+    const result: RegExpMatchArray[] = [];
     while (true) {
-        const matched = string.match(regex);
-        if (!matched) break;
+        const matched: RegExpMatchArray = line.match(regex);
+        if (!matched) {
+            break;
+        }
         result.push(matched);
-        string = string.substr(matched.index + matched[0].length);
+        line = line.substr(matched.index + matched[0].length);
     }
+
     return result;
 }
 
 function matchWithFormat(pattern: string, letter: string, key: string): Pattern[] {
     const result: Pattern[] = [];
-    const regex = /s/;
     matchRecursively(pattern, new RegExp(`%(-?\\d*)${letter}{(.*?)}`, 'i'))
-        .forEach(match => {
+        .forEach((match: RegExpMatchArray) => {
             result.push({
                 key,
                 padding: parseInt(match[1]) || 0,
                 index: match.index,
                 format: match[2],
                 length: match[0].length,
-            })
+            });
         });
+
     return result;
 }
 
 function matchPlain(pattern: string, letter: string, key: string): Pattern[] {
     return matchRecursively(pattern, new RegExp(`%(-?\\d*)${letter}`, 'i'))
-        .map(match => ({
+        .map((match: RegExpMatchArray) => ({
                 key,
                 padding: parseInt(match[1]) || 0,
                 index: match.index,
@@ -64,91 +67,105 @@ function matchPlain(pattern: string, letter: string, key: string): Pattern[] {
             }));
 }
 
-function stripText(string: string, patterns: Pattern[]): Pattern[] {
-    const result = [];
-    const sorted = patterns.sort((a, b) => a.index - b.index);
-    let index = 0;
+function stripText(line: string, patterns: Pattern[]): Pattern[] {
+    const result: Pattern[] = [];
+    const sorted: Pattern[] = patterns.sort((a: Pattern, b: Pattern) => a.index - b.index);
+    let index: number = 0;
     for (const pattern of sorted) {
         result.push({
             key: 'text',
+            padding: 0,
             index,
             length: pattern.index - index,
-            format: string.substr(index, pattern.index - index),
-        })  
+            format: line.substr(index, pattern.index - index),
+        });
+
         index = pattern.length + pattern.index;
     }
     result.push({
         key: 'text',
         index,
-        length: string.length - index,
-        format: string.substr(index),
+        padding: 0,
+        length: line.length - index,
+        format: line.substr(index),
     });
+
     return result;
 }
 
-
-
-function padString(string: string, padding: number): string {
-    if (padding === 0) return string;
+function padString(line: string, padding: number): string {
+    if (padding === 0) {
+        return line;
+    }
     if (padding < 0) {
+        // tslint:disable-next-line no-magic-numbers
         padding = -padding;
-        return string.substr(0, padding) + ' '.repeat(Math.max(padding - string.length, 0));
+
+        return line.substr(0, padding) + ' '.repeat(Math.max(padding - line.length, 0));
     } else {
-        return ' '.repeat(Math.max(padding - string.length, 0)) + string.substr(0, padding);
+        return ' '.repeat(Math.max(padding - line.length, 0)) + line.substr(0, padding);
     }
 }
 
 function matchPatterns(pattern: string): Pattern[] {
-    const patterns = [];
+    const patterns: Pattern[] = [];
     for (const letter in PLAIN_KEYS) {
         patterns.push(...matchPlain(pattern, letter, PLAIN_KEYS[letter]));
     }
     for (const letter in FORMAT_KEYS) {
         patterns.push(...matchWithFormat(pattern, letter, FORMAT_KEYS[letter]));
     }
-    const formatted = patterns.filter(pattern => !!pattern.format);
-    return patterns.filter(pattern =>
-        !formatted.find(
-            formattedPattern =>
-                formattedPattern.index === pattern.index &&
-                formattedPattern.key === pattern.key &&
-                !pattern.format
-        )
-    )
+    const formatted: Pattern[] = patterns.filter((patternToBeFiltered: Pattern) => !!patternToBeFiltered.format);
+
+    return patterns.filter((patternToBeFiltered: Pattern) => {
+        return !formatted.find(
+            (formattedPattern: Pattern) => {
+                return (
+                    formattedPattern.index === patternToBeFiltered.index &&
+                    formattedPattern.key === patternToBeFiltered.key &&
+                    !patternToBeFiltered.format
+                );
+            });
+    });
 }
 
 class PatternLayout {
 
     private patterns: Pattern[] = [];
 
-    constructor(private pattern: string) {
-        this.patterns  = matchPatterns(pattern); 
-        const composites = matchWithFormat(pattern, 'c', 'composite')
-            .map(composite => {
+    public constructor(private pattern: string) {
+        this.patterns  = matchPatterns(pattern);
+        const composites: Pattern[] = matchWithFormat(pattern, 'c', 'composite')
+            .map((composite: Pattern) => {
                 composite.patterns = matchPatterns(composite.format);
                 composite.patterns = composite.patterns
-                    .concat(stripText(composite.format, composite.patterns)).sort((a, b) => a.index - b.index);
+                    .concat(stripText(composite.format, composite.patterns))
+                    .sort((a: Pattern, b: Pattern) => a.index - b.index);
+
                 return composite;
-            })
-        this.patterns = this.patterns.filter(pattern => {
+            });
+        this.patterns = this.patterns.filter((patternToBeFiltered: Pattern) => {
             for (const composite of composites) {
                 if (
-                    (pattern.index > composite.index) &&
-                    (pattern.index + pattern.length < composite.index + composite.length)
+                    (patternToBeFiltered.index > composite.index) &&
+                    (patternToBeFiltered.index + patternToBeFiltered.length < composite.index + composite.length)
                 ) {
                     return false;
                 }
             }
+
             return true;
         });
         this.patterns.push(...composites);
-        this.patterns = this.patterns.concat(stripText(pattern, this.patterns)).sort((a, b) => a.index - b.index);
+        this.patterns = this.patterns
+            .concat(stripText(pattern, this.patterns))
+            .sort((a: Pattern, b: Pattern) => a.index - b.index);
     }
 
-    parse(layout: Layout, patterns: Pattern[] = this.patterns): string {
-        let result = '';
+    public parse(layout: Layout, patterns: Pattern[] = this.patterns): string {
+        let result: string = '';
         for (const pattern of patterns) {
-            let part = '';
+            let part: string = '';
             if (pattern.key === 'composite') {
                 part = this.parse(layout, pattern.patterns);
             } else if (pattern.key === 'text') {
@@ -156,12 +173,13 @@ class PatternLayout {
             } else if (pattern.key === 'date' && pattern.format) {
                 part = moment(layout.date).format(pattern.format);
             } else if (pattern.key === 'level') {
-                part = utils.EnumUtil.toString(LogLevel, layout.level);
+                part = EnumUtil.toString(LogLevel, layout.level);
             } else {
                 part = layout[pattern.key];
             }
             result += padString(part.toString(), pattern.padding);
         }
+
         return result;
     }
 }

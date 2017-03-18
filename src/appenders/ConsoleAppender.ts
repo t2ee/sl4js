@@ -4,17 +4,17 @@ import Appender from '../core/Appender';
 import Layout from '../core/Layout';
 import ConsoleAppenderConfiguration from '../config/ConsoleAppenderConfiguration';
 
-const FONT_COLORS = {
+const FONT_COLORS: {[level: number]: string} = {
     [LogLevel.DEBUG]: 'blue',
     [LogLevel.TRACE]: 'grey',
     [LogLevel.INFO]: 'cyan',
     [LogLevel.WARN]: 'yellow',
     [LogLevel.ERROR]: 'red',
-}
+};
 
 class ConsoleAppender extends Appender<ConsoleAppenderConfiguration> {
-    log(layout: Layout): void {
-        let message = this.patternLayout.parse(layout);
+    public log(layout: Layout): void {
+        let message: string = this.patternLayout.parse(layout);
         if (layout.level === LogLevel.FATAL) {
             message = colors.bgRed.white(message);
         } else {
