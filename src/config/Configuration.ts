@@ -1,19 +1,21 @@
 import {
-    Configurable,
-    ConfigField,
-} from '@t2ee/configurable';
+    Component,
+    Value,
+} from '@t2ee/core';
 
-
+import LogLevel from '../core/LogLevel';
 import AppenderConfiguration from './AppenderConfiguration';
-import RootConfiguration from './RootConfiguration';
 
-@Configurable('logger')
+@Component
 class Configuration {
-    @ConfigField
+    @Value('appenders', 'logger', true)
     public appenders: AppenderConfiguration[];
 
-    @ConfigField
-    public root: RootConfiguration;
+    @Value('default', 'logger', true)
+    public default: string;
+
+    @Value('level', 'logger', true)
+    public level: LogLevel;
 }
 
 export default Configuration;

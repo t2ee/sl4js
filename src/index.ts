@@ -4,7 +4,6 @@ import AppenderConfiguration from './config/AppenderConfiguration';
 import Configuration from './config/Configuration';
 import ConsoleAppenderConfiguration from './config/ConsoleAppenderConfiguration';
 import FileAppenderConfiguration from './config/FileAppenderConfiguration';
-import RootConfiguration from './config/RootConfiguration';
 import Appender from './core/Appender';
 import Layout from './core/Layout';
 import LogLevel from './core/LogLevel';
@@ -19,7 +18,6 @@ export {
     Configuration,
     ConsoleAppenderConfiguration,
     FileAppenderConfiguration,
-    RootConfiguration,
     Appender,
     Layout,
     LogLevel,
@@ -29,9 +27,9 @@ export {
 };
 
 import {
-    ConfigStore,
-} from '@t2ee/configurable';
+    ConfigurationStore,
+} from '@t2ee/core';
 import * as path from 'path';
 
-ConfigStore.provide('LogLevel', LogLevel);
-ConfigStore.provide('relative', (p: string) => path.resolve(process.cwd(), p));
+ConfigurationStore.provide('LogLevel', LogLevel);
+ConfigurationStore.provide('relative', (p: string) => path.resolve(process.cwd(), p));

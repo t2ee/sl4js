@@ -1,7 +1,7 @@
 import {
     Container,
-    Injectable,
     AutoWired,
+    Component,
     ClassConstructors,
 } from '@t2ee/core';
 
@@ -15,7 +15,7 @@ import PatternLayout from './PatternLayout';
 import ConsoleAppender from '../appenders/ConsoleAppender';
 import FileAppender from '../appenders/FileAppender';
 
-@Injectable
+@Component
 export class LogManager {
     private static instance: LogManager;
     private loggers: {[name: string]: Logger} = {};
@@ -26,52 +26,32 @@ export class LogManager {
         file: FileAppender,
     };
 
-    public static getInstance(config?: Configuration): LogManager {
-        if (!LogManager.instance) {
-            LogManager.instance = Container.get(LogManager, Container.DefaultProvider);
-            if (config) {
-                LogManager.instance.configuration = config;
-            }
-        }
-
-        return LogManager.instance;
-    }
-
     @AutoWired
     private configuration: Configuration;
 
-    public getLogger(name?: string): Logger {
-        const isRoot: boolean = !!name;
+    public static getLogger(name?: string): Logger {
+        if (!LogManager.instance) {
+            LogManager.instance = Container.get(LogManager);
+        }
+        const instance: LogManager = LogManager.instance;
 
-        if (!this.configuration.root && !this.configuration.appenders) {
-            this.configuration = {
-                root: {
-                    level: LogLevel.DEBUG,
-                    default: 'console',
-                },
-                appenders: [{
-                    name: 'console',
-                    appender: 'console',
-                    pattern: '[%d{YYYY-MM-DD HH:mm:ss}] %4l %10n %5p - %2w  %m',
-                    level: LogLevel.DEBUG,
-                }],
-            };
-            this.getLogger().warn('No configuration file found for sl4js, using default configuration.');
+        name = name || instance.configuration.default;
+        if (name in instance.loggers) {
+            return instance.loggers[name];
         }
-        name = name || this.configuration.root.default;
-        if (name in this.loggers) {
-            return this.loggers[name];
-        }
+
+        const isRoot: boolean = name === instance.configuration.default;
+
         const config: AppenderConfiguration =
-            this.configuration.appenders.find((appender: AppenderConfiguration) => appender.name === name);
-        if (config && config.appender in this.appenders) {
-            const level: LogLevel = isRoot ? this.configuration.root.level : config.level;
+            instance.configuration.appenders.find((appender: AppenderConfiguration) => appender.name === name);
+        if (config && config.appender in instance.appenders) {
+            const level: LogLevel = isRoot ? instance.configuration.level : config.level;
             const logger: Logger = new Logger(
-                new this.appenders[config.appender](
+                new instance.appenders[config.appender](
                     new PatternLayout(config.pattern), name, config,
                 ),
             level);
-            this.loggers[name] = logger;
+            instance.loggers[name] = logger;
 
             return logger;
         }
