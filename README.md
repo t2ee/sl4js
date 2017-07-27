@@ -73,6 +73,12 @@ symbol | usage
 %n     | logger name
 %p     | process id
 %w     | worker id
+%c     | `%c{PATTERN}`, composite, symbols and characters in side pattern, used to format pattern with extra characters, e.g, `%-7c{[%l]}`, this format the whole section.
 
 > padding: number in fornt of symbols, e.g, `%10m`, means 10 characters max, align right. negative number means align left.
 
+## LogManager.registerAppender(string, appender)
+
+> first argument is the appender name to be registered under.
+
+> second argument is the appender class, see `src/appenders` for example.
