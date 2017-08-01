@@ -22,6 +22,10 @@
 
 A simple logging library yet with powerful functionalities. Customizable appenders and rich output format. Share configurations through application.
 
+# Installation
+
+`npm i reflect-metadata @t2ee/core @t2ee/sl4js -S`
+
 # Example
 
 ```yaml

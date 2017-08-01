@@ -1,12 +1,12 @@
 {
   "name": "@t2ee/sl4js",
-  "version": "0.1.6",
-  "description": "> This library is to be used with [@t2ee/core](https://github.com/t2ee/core)",
+  "version": "0.1.7",
+  "description": "This library is to be used with [@t2ee/core](https://github.com/t2ee/core)",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsc -p src/tsconfig.json",
-    "prepublish": "npm run build",
+    "prepublish": "npm run test && npm run build",
     "build-test": "rm -rf test-dist/ && tsc -p src/tsconfig.test.json",
     "test": "npm run build-test && ava test-dist/**/*.test.js",
     "coverage": "npm run build-test && nyc ava -- test-dist/**/*.test.js"
@@ -17,13 +17,14 @@
     "@types/q": "^1.0.3",
     "ava": "^0.21.0",
     "nyc": "^11.1.0",
-    "q": "^1.5.0",
-    "tslint": "^4.5.1",
-    "tslint-eslint-rules": "^3.4.0",
-    "typescript": "^2.4.2"
+    "q": "^1.5.0"
+  },
+  "peerDependencies": {
+    "@t2ee/core": "0.1.x",
+    "reflect-metadata": "^0.1.10",
+    "typescript": "2.4.x"
   },
   "dependencies": {
-    "@t2ee/core": "^0.1.11",
     "@types/colors": "^1.1.1",
     "@types/node": "^7.0.8",
     "colors": "^1.1.2",
