@@ -22,6 +22,9 @@
 
 A simple logging library yet with powerful functionalities. Customizable appenders and rich output format. Share configurations through application.
 
+For detailed introduction and examples, please visit (sl4js.t2ee.org)[http://sl4js.t2ee.org]
+
+
 # Installation
 
 `npm i reflect-metadata @t2ee/core @t2ee/sl4js -S`
