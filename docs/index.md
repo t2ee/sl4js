@@ -61,9 +61,9 @@ class ConsoleAppender extends Appender<Configuration> {
 }
 ```
 
-# Layout
+# Pattern
 
-Layout refers to what you put in appenders' pattern field, e.g, `'%d{YYYY-MM-DD HH:mm:ss.SSS} %-7c{[%l]} %10n %5p - %2w  %m'`
+Pattern refers to what you put in appenders' pattern field, e.g, `'%d{YYYY-MM-DD HH:mm:ss.SSS} %-7c{[%l]} %10n %5p - %2w  %m'`
 
 As you can see in the example, any prefix digit, e.g, `%7d`, `%-7d`, refers to padding, positive means left, vice versa.
 

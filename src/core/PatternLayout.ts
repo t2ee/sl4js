@@ -60,11 +60,11 @@ function matchWithFormat(pattern: string, letter: string, key: string): Pattern[
 function matchPlain(pattern: string, letter: string, key: string): Pattern[] {
     return matchRecursively(pattern, new RegExp(`%(-?\\d*)${letter}`, 'i'))
         .map((match: RegExpMatchArray) => ({
-                key,
-                padding: parseInt(match[1]) || 0,
-                index: match.index,
-                length: match[0].length,
-            }));
+            key,
+            padding: parseInt(match[1]) || 0,
+            index: match.index,
+            length: match[0].length,
+        }));
 }
 
 function stripText(line: string, patterns: Pattern[]): Pattern[] {
