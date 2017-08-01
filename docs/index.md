@@ -22,24 +22,11 @@
 
 A simple logging library yet with powerful functionalities. Customizable appenders and rich output format. Share configurations through application.
 
-# Example
+# Usage
 
-```yaml
-  default: ConsoleDebug
-  level: LogLevel.DEBUG
-  appenders:
-  - name: ConsoleDebug
-    appender: console
-      pattern: '%d{YYYY-MM-DD HH:mm:ss.SSS} %-7c{[%l]} %10n %5p - %2w  %M'
-      level: LogLevel.DEBUG
-  - name: FileLog
-    appender: file
-    pattern: '%d{YYYY-MM-DD HH:mm:ss.SSS} [%l] %10n %5p - %2w  %M'
-    level: LogLevel.INFO
-    file: relative(file.log)
-```
 
-```typescript
-ConfigurationStore.loadFile(PATH_TO_LOGGING_CONFIGURATION);
-LogManager.getLogger().debug('Hello World');
-```
+# API
+
+## Coming soon ...
+
+Coming soon...
