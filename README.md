@@ -22,7 +22,7 @@
 
 A simple logging library yet with powerful functionalities. Customizable appenders and rich output format. Share configurations through application.
 
-For detailed introduction and examples, please visit (sl4js.t2ee.org)[http://sl4js.t2ee.org]
+For detailed introduction and examples, please visit [sl4js.t2ee.org](http://sl4js.t2ee.org)
 
 
 # Installation
