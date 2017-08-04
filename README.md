@@ -1,11 +1,11 @@
 <p align="center">
-    <a href="//t2ee.org">
-        <img width="200" src="//t2ee.org/img/logos/t2ee.png">
+    <a href="https://t2ee.org">
+        <img width="200" src="https://t2ee.org/img/logos/t2ee.png">
     </a>
 </p>
 <p align="center">
-    <a href="//sl4js.t2ee.org">
-        <img width="200" src="//t2ee.org/img/logos/sl4js.png">
+    <a href="https://sl4js.t2ee.org">
+        <img width="200" src="https://t2ee.org/img/logos/sl4js.png">
     </a>
 </p>
 
