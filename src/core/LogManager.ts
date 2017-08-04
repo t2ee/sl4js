@@ -40,6 +40,7 @@ export class LogManager {
             return instance.loggers[name];
         }
 
+        console.log(instance.configuration)
         const isRoot: boolean = name === instance.configuration.default;
 
         const config: AppenderConfiguration =

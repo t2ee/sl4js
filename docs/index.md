@@ -1,11 +1,11 @@
 <p align="center">
-    <a href="http://t2ee.org">
-        <img width="200" src="http://t2ee.org/img/logos/t2ee.png">
+    <a href="//t2ee.org">
+        <img width="200" src="//t2ee.org/img/logos/t2ee.png">
     </a>
 </p>
 <p align="center">
-    <a href="http://sl4js.t2ee.org">
-        <img width="200" src="http://t2ee.org/img/logos/sl4js.png">
+    <a href="//sl4js.t2ee.org">
+        <img width="200" src="//t2ee.org/img/logos/sl4js.png">
     </a>
 </p>
 
@@ -75,7 +75,7 @@ As for chacaters(placeholders) supported, see chart below.
 
 character |       usage        | description
 ----------|--------------------|-------------
-d         | `%d`, or `%d{FORMAT}`, FORMAT is a valid (momentjs)[http://momentjs.com/] format | it displays the date.
+d         | `%d`, or `%d{FORMAT}`, FORMAT is a valid (momentjs)[//momentjs.com/] format | it displays the date.
 c         | `%c{PATTERN}`, PATTERN is any other valid pattern | composite, it allows to pad multiple patterns all together.
 n         | `%n`               | appender name
 m         | `%m`               | message

@@ -1,11 +1,11 @@
 <p align="center">
-    <a href="http://t2ee.org">
-        <img width="200" src="http://t2ee.org/img/logos/t2ee.png">
+    <a href="//t2ee.org">
+        <img width="200" src="//t2ee.org/img/logos/t2ee.png">
     </a>
 </p>
 <p align="center">
-    <a href="http://sl4js.t2ee.org">
-        <img width="200" src="http://t2ee.org/img/logos/sl4js.png">
+    <a href="//sl4js.t2ee.org">
+        <img width="200" src="//t2ee.org/img/logos/sl4js.png">
     </a>
 </p>
 
@@ -22,7 +22,7 @@
 
 A simple logging library yet with powerful functionalities. Customizable appenders and rich output format. Share configurations through application.
 
-For detailed introduction and examples, please visit [sl4js.t2ee.org](http://sl4js.t2ee.org)
+For detailed introduction and examples, please visit [sl4js.t2ee.org](//sl4js.t2ee.org)
 
 
 # Installation

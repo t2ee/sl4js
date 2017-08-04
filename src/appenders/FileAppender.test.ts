@@ -7,7 +7,7 @@ import * as fs from 'fs';
 import * as Q from 'q';
 import test from 'ava';
 
-test('ConsoleAppender', async t => {
+test('FileAppender', async t => {
     let currentMessage = null;
     console.log = (message) => {
         currentMessage = message;
