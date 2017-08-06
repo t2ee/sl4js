@@ -8,13 +8,13 @@ import AppenderConfiguration from './AppenderConfiguration';
 
 @Component
 class Configuration {
-    @Value('appenders', 'logger', true)
+    @Value('appenders', 'logger')
     public appenders: AppenderConfiguration[];
 
-    @Value('default', 'logger', true)
+    @Value('default', 'logger')
     public default: string;
 
-    @Value('level', 'logger', true)
+    @Value('level', 'logger')
     public level: LogLevel;
 }
 

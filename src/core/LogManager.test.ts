@@ -7,11 +7,10 @@ import {
 import test from 'ava';
 
 test('LogManager', t => {
-    let currentMessage = null;
-    console.log = (message) => {
-        currentMessage = message;
-    }
+    //let currentMessage = null;
+    let logger = LogManager.getLogger();
+    t.not(logger, null);
     ConfigurationStore.loadFile(path.resolve(__dirname, '../../logger'));
-    const logger = LogManager.getLogger();
+    logger = LogManager.getLogger();
     t.not(logger, null);
 });

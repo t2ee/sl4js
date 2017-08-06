@@ -35,12 +35,29 @@ export class LogManager {
         }
         const instance: LogManager = LogManager.instance;
 
+        if (!instance.configuration.appenders) {
+            instance.configuration.appenders = [{
+                name: 'console',
+                appender: 'console',
+                pattern: '%d{YYYY-MM-DD HH:mm:ss.SSS} %-7c{[%l]} %10n %5p - %2w  %M',
+                level: LogLevel.DEBUG,
+            }];
+        }
+
+        if (!instance.configuration.default) {
+            instance.configuration.default = 'console';
+        }
+
+        if (!instance.configuration.level) {
+            instance.configuration.level = LogLevel.DEBUG;
+        }
+
         name = name || instance.configuration.default;
         if (name in instance.loggers) {
             return instance.loggers[name];
         }
 
-        console.log(instance.configuration)
+
         const isRoot: boolean = name === instance.configuration.default;
 
         const config: AppenderConfiguration =
