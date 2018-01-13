@@ -2,7 +2,6 @@ import {
     Container,
     AutoWired,
     Component,
-    ClassConstructors,
 } from '@t2ee/core';
 
 import Logger from './Logger';
@@ -15,18 +14,18 @@ import PatternLayout from './PatternLayout';
 import ConsoleAppender from '../appenders/ConsoleAppender';
 import FileAppender from '../appenders/FileAppender';
 
-@Component
+@Component()
 export class LogManager {
     private static instance: LogManager;
     private loggers: {[name: string]: Logger} = {};
     private appenders: {
-        [name: string]: ClassConstructors.ClassConstructor3<Appender<any>, PatternLayout, string, any>,
+        [name: string]: new (layout: PatternLayout, name: string, config: any) => Appender<any>,
     } = {
         console: ConsoleAppender,
         file: FileAppender,
     };
 
-    @AutoWired
+    @AutoWired()
     private configuration: Configuration;
 
     public static getLogger(name?: string): Logger {
@@ -79,8 +78,7 @@ export class LogManager {
 
     public registerAppender(
         name: string,
-        appender: ClassConstructors.ClassConstructor2<Appender<any>,
-        PatternLayout, any>,
+        appender: new (layout: PatternLayout, name: string, config: any) => Appender<any>,
     ): void {
         this.appenders[name] = appender;
     }

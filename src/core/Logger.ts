@@ -15,7 +15,7 @@ class Logger {
         }
         this.appender.log({
             processId: process.pid,
-            workerId: cluster.isWorker ? parseInt(cluster.worker.id) : 0,
+            workerId: cluster.isWorker ? cluster.worker.id : 0,
             name: this.appender.name,
             date,
             level,

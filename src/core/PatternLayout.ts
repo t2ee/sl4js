@@ -1,7 +1,4 @@
 import * as moment from 'moment';
-import {
-    EnumUtil,
-} from '@t2ee/core';
 import LogLevel from './LogLevel';
 import Layout from './Layout';
 
@@ -173,7 +170,9 @@ class PatternLayout {
             } else if (pattern.key === 'date' && pattern.format) {
                 part = moment(layout.date).format(pattern.format);
             } else if (pattern.key === 'level') {
-                part = EnumUtil.toString(LogLevel, layout.level);
+                const keys: string[] = Object.keys(LogLevel);
+                const values: number[] = keys.map((key: string) => LogLevel[key]);
+                part = keys[values.indexOf(layout.level)];
             } else {
                 part = layout[pattern.key];
             }

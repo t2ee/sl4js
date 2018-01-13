@@ -6,7 +6,7 @@ import {
 import LogLevel from '../core/LogLevel';
 import AppenderConfiguration from './AppenderConfiguration';
 
-@Component
+@Component()
 class Configuration {
     @Value('appenders', 'logger')
     public appenders: AppenderConfiguration[];
