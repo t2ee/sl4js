@@ -1,6 +1,6 @@
 {
   "name": "@t2ee/sl4js",
-  "version": "1.0.0-alpha",
+  "version": "1.0.0-alpha2",
   "description": "This library is to be used with [@t2ee/core](https://github.com/t2ee/core)",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
